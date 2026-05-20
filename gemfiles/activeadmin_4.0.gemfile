@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "activeadmin", "= 4.0.0.beta22"
+gem "rake"
+
+group :test do
+  gem "rspec-rails", "~> 7.0"
+  gem "capybara"
+  gem "capybara_active_admin"
+  gem "sqlite3"
+  gem "puma"
+  gem "propshaft"
+  gem "importmap-rails"
+  gem "cssbundling-rails"
+  gem "tailwindcss-rails", "~> 4.0"
+  gem "actionmailer"
+  gem "selenium-webdriver", "~> 4.20"
+end

@@ -3,6 +3,9 @@
 /gemfiles/*.lock
 /pkg/
 /spec/.rspec-results
+# Override global ~/.gitignore_global that blanket-ignores database.yml:
+# the dummy app's :memory: SQLite config is harmless and required by CI.
+!spec/dummy/config/database.yml
 /spec/dummy/db/*.sqlite3
 /spec/dummy/log/*.log
 /spec/dummy/tmp/

@@ -1,5 +1,9 @@
 # activeadmin_table_footer
 
+![CI](https://github.com/activeadmin-plugins/activeadmin_table_footer/workflows/CI/badge.svg)
+![Coverage](https://img.shields.io/endpoint?url=https://activeadmin-plugins.github.io/activeadmin_table_footer/badge.json)
+![Ruby](https://img.shields.io/badge/ruby-3.3%2B-blue)
+
 Adds a `<tfoot>` row to ActiveAdmin index tables. Totals are aggregated
 across **all pages** of the filtered scope — not just the visible one — in a
 single SQL query when you use `footer_data:`.

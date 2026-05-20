@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+if ENV["COVERAGE"] == "true"
+  require "simplecov"
+  SimpleCov.start do
+    add_filter "/spec/"
+    add_filter "/gemfiles/"
+    enable_coverage :line
+  end
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

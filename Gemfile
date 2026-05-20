@@ -14,4 +14,5 @@ group :test do
   gem "puma"
   gem "sassc-rails"
   gem "actionmailer"
+  gem "simplecov", require: false
 end

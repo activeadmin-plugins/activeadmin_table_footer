@@ -11,7 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.2", "3.3"]
+        # capybara_active_admin >= 1.0 (the version we test against) requires Ruby >= 3.3
+        ruby: ["3.3", "3.4"]
         gemfile:
           - gemfiles/activeadmin_3.5.gemfile
           - gemfiles/activeadmin_4.0.gemfile

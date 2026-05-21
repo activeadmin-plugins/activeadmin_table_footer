@@ -3,13 +3,11 @@
 require "rails/engine"
 
 module ActiveadminTableFooter
+  # Empty engine — kept so Rails recognizes this gem as an engine on
+  # boot. Patches are applied eagerly from
+  # `lib/activeadmin_table_footer.rb` so they are in place before AA
+  # resources are loaded (even when consuming engines `require` admin
+  # files from an initializer).
   class Engine < ::Rails::Engine
-    config.to_prepare do
-      require "activeadmin_table_footer/table_for_extension"
-      require "activeadmin_table_footer/index_as_table_extension"
-
-      ActiveAdmin::Views::TableFor.prepend(ActiveadminTableFooter::TableForExtension)
-      ActiveAdmin::Views::IndexAsTable.prepend(ActiveadminTableFooter::IndexAsTableExtension)
-    end
   end
 end

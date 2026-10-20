@@ -8,9 +8,12 @@ module ActiveadminTableFooter
       super(obj, *attrs, options)
     end
 
+    # Any falsy callback means "no footer" — `&.` would only skip nil and raise
+    # on `footer_data: false`, which is what `footer_data: flag && ->(c) { ... }`
+    # passes when the flag is off.
     def footer_data
       return @footer_data if defined?(@footer_data)
-      @footer_data = @footer_data_proc&.call(unscoped_collection_for_footer)
+      @footer_data = (@footer_data_proc.call(unscoped_collection_for_footer) if @footer_data_proc)
     end
 
     # The collection AA passes us is the paginated + ordered slice. Aggregates

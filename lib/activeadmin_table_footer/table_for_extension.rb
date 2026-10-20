@@ -8,10 +8,12 @@ module ActiveadminTableFooter
       super(obj, *attrs, options)
     end
 
+    # Any falsy callback means "no footer" — `&.` would only skip nil and raise
+    # on `footer_data: false`, which is what `footer_data: flag && ->(c) { ... }`
+    # passes when the flag is off.
     def footer_data
       return @footer_data if defined?(@footer_data)
-      return (@footer_data = nil) unless @footer_data_proc
-      @footer_data = @footer_data_proc.call(unscoped_collection_for_footer)
+      @footer_data = (@footer_data_proc.call(unscoped_collection_for_footer) if @footer_data_proc)
     end
 
     # The collection AA passes us is the paginated + ordered slice. Aggregates
@@ -49,14 +51,15 @@ module ActiveadminTableFooter
     def build_footer_cell_for(col)
       within @aatf_footer_row do
         column_key = column_key_for(col)
-        # Always include `col col-<key>` so capybara_active_admin matchers
-        # (`have_table_cell(column: ...)`) work in both AA 3 and AA 4 — the
-        # selector convention is `td.col.col-<key>`.
-        compat_classes = column_key ? "col col-#{column_key}" : "col"
-        classes = [col.html_class, compat_classes, ActiveadminTableFooter.footer_th_class]
-                    .reject { |c| c.nil? || c.to_s.empty? }
-                    .join(" ")
-        attrs = { class: classes.empty? ? nil : classes }
+        # `col` + `col-<key>` keeps capybara_active_admin's
+        # `have_table_cell(column: ...)` matcher working on AA 3 and AA 4.
+        classes = [
+          col.html_class,
+          "col",
+          ("col-#{column_key}" if column_key),
+          ActiveadminTableFooter.footer_th_class
+        ].compact_blank.join(" ").presence
+        attrs = { class: classes }
         attrs[:"data-column"] = column_key if column_key
         td(**attrs) do
           render_footer_value(col) if column_has_footer?(col)
@@ -66,12 +69,8 @@ module ActiveadminTableFooter
 
     def column_key_for(col)
       # AA 4 exposes Column#title_id; AA 3 does not — derive from title.
-      if col.respond_to?(:title_id) && col.title_id.respond_to?(:presence)
-        return col.title_id.presence
-      end
-      title = col.title.to_s
-      return nil if title.empty?
-      title.parameterize(separator: "_")
+      return col.title_id.presence if col.respond_to?(:title_id)
+      col.title.to_s.presence&.parameterize(separator: "_")
     end
 
     def ensure_tfoot!
